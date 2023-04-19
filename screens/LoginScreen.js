@@ -28,7 +28,7 @@ const LoginScreen = ({navigation}) => {
       alert('Please fill all the fields');
       return;
     }
-    navigation.navigate('HomeScreen');
+    navigation.navigate('DashboardScreen');
   }
   return (
     <View style={styles.container}>

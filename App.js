@@ -24,7 +24,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useFocusEffect} from '@react-navigation/native';
 
 // Import Screens
-import HomeScreen from './screens/HomeScreen';
+import DashboardScreen from './screens/DashboardScreen';
 import LoginScreen from './screens/LoginScreen';
 const Stack = createStackNavigator();
 
@@ -40,8 +40,8 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
+          name="DashboardScreen"
+          component={DashboardScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
