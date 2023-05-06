@@ -8,11 +8,41 @@ import {
   Button,
 } from 'react-native';
 import React, {useState} from 'react';
+import Contacts from 'react-native-contacts';
+import { PermissionsAndroid } from 'react-native';
+
+import {openDatabase} from 'react-native-sqlite-storage';
+var db = openDatabase({name: 'mynotification.db'});  // name of the database
 
 const CampaignScreen = ({navigation}) => {
   const [selectedItem, setSelectedItem] = useState([]);
   const [visible, setVisible] = useState(false);
+  
+  db.executeSql('SELECT * FROM registration', [], (resultSet) => {
+    const rows = resultSet.rows;
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows.item(i);
+      // handle the row data here
+      console.log("row: ",row);
+    }
+  }, (error) => {
+    // handle the error here
+  });
 
+
+  /*function fetchData() {
+    fetch('https://example.com/api/data')
+      .then((response) => response.json())
+      .then((json) => {
+        // handle the JSON response here
+        console.log(json);
+      })
+      .catch((error) => {
+        // handle the error here
+        console.error(error);
+      });
+  }*/
+   
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -28,11 +58,44 @@ const CampaignScreen = ({navigation}) => {
     },
   ];
 
+  async function requestContactsPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        {
+          title: 'Contacts Permission',
+          message:
+            'This app needs access to your contacts to show them on the screen.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Contacts permission granted');
+      } else {
+        console.log('Contacts permission denied');
+      }
+    } catch (err) {
+      console.warn(err.message);
+    }
+  }
+
   async function showData(item) {
     console.log(item);
     setSelectedItem(item);
     setVisible(true);
   }
+
+  const handleGetContacts = () => {
+    Contacts.getAll((err, contacts) => {
+      if (err) {
+        throw err;
+      }
+      console.log(contacts); // This will log all the contacts in your console
+    });
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -88,6 +151,9 @@ const CampaignScreen = ({navigation}) => {
             }}>
             {selectedItem.id}
           </Text>
+          <TouchableOpacity onPress={handleGetContacts}>
+            <Text>Refer People</Text>
+          </TouchableOpacity>
           <Button title="Close" onPress={() => setVisible(false)} />
         </View>
       </Modal>
