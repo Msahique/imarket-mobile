@@ -92,7 +92,7 @@ const CampaignScreen = ({navigation}) => {
       if (err) {
         throw err;
       }
-      console.log(contacts); // This will log all the contacts in your console
+      console.log("contacts: ",contacts); // This will log all the contacts in your console
     });
   };
   
